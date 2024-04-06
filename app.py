@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+import requests
 
 app = Flask(__name__)
 
@@ -17,6 +18,23 @@ def parse_json():
             return jsonify({'error': 'Invalid JSON format: missing "text" key'}), 400
 
     return jsonify({'error': 'Success'}), 200
+
+@app.route('/auth', methods=['GET','POST'])
+def auth():
+    # Check if the request contains JSON data
+
+
+# Step 2: Send POST request to obtain Bearer Token
+    url = "http://192.168.192.194:2003/symfony/web/index.php/oauth/issueToken"
+    payload = {
+        "client_id": "chetan",
+        "client_secret": "chetan",
+        "grant_type": "client_credentials"
+    }
+    response = requests.post(url, data=payload)
+    print(response.text)
+
+    return jsonify({'status': 'Success'}), 200
 
 
 app.run(debug=True)
